@@ -32,7 +32,7 @@ const AddItem = () => {
         placeholder="Title"
         value={todo.title}
       />
-      <input
+      <textarea
         onChange={updateInput}
         type="text"
         name="description"
