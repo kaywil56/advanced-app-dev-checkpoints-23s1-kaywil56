@@ -1,9 +1,13 @@
-import AddItem from "./components/AddItem"
+import AddItem from "./components/AddItem";
+import TodoList from "./components/TodoList";
 
 const App = () => {
   return (
-   <AddItem />
-  )
-}
+    <>
+      <TodoList />
+      <AddItem />
+    </>
+  );
+};
 
-export default App
+export default App;
