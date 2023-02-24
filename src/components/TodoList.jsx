@@ -14,6 +14,7 @@ const TodoList = () => {
         const items = [];
         querySnapshot.forEach((doc) => {
           items.push({
+            id: doc.id,
             title: doc.data().title,
             description: doc.data().description,
           });
