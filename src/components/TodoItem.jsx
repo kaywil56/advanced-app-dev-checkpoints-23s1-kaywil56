@@ -1,5 +1,5 @@
 import DeleteItem from "./DeleteItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import firestore from "../firestore";
 
@@ -22,6 +22,10 @@ const TodoItem = ({ todo }) => {
   const updateInput = (e) => {
     setEditTodo({ ...editTodo, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    setEditTodo({title: todo.title, description: todo.description})
+  }, [todo])
 
   return (
     <li>

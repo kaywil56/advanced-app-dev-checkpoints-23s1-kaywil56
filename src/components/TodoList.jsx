@@ -24,7 +24,7 @@ const TodoList = () => {
     };
     fetchTodos();
   }, []);
-
+  
   return (
     <ul>
       {todos.map((todo, idx) => {
