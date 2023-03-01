@@ -10,7 +10,7 @@ const TodoList = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       const q = await query(collection(firestore, "todos"));
-      onSnapshot(q, (querySnapshot) => {
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const items = [];
         querySnapshot.forEach((doc) => {
           items.push({
@@ -20,6 +20,7 @@ const TodoList = () => {
           });
         });
         setTodos(items);
+        return () => unsubscribe()
       });
     };
     fetchTodos();
