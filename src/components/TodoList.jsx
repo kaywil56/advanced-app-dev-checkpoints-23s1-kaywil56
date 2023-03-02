@@ -13,11 +13,11 @@ const TodoList = () => {
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const items = [];
         querySnapshot.forEach((doc) => {
-          items.push({
-            id: doc.id,
-            title: doc.data().title,
-            description: doc.data().description,
-          });
+            items.push({
+              id: doc.id,
+              title: doc.data().title,
+              description: doc.data().description,
+            });
         });
         setTodos(items);
         return () => unsubscribe()
