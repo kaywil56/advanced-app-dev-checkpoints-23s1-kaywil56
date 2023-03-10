@@ -24,6 +24,7 @@ const TodoItem = ({ todo }) => {
   };
 
   useEffect(() => {
+    console.log(todo)
     setEditTodo({title: todo.title, description: todo.description})
   }, [todo])
 
@@ -34,12 +35,14 @@ const TodoItem = ({ todo }) => {
           <input
             onChange={updateInput}
             name="title"
+            aria-label="title"
             placeholder={todo.title}
             value={editTodo.title}
           />
           <textarea
             onChange={updateInput}
             name="description"
+            aria-label="description"
             placeholder={todo.description}
             value={editTodo.description}
           />

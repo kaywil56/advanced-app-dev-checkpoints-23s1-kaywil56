@@ -26,4 +26,12 @@ export default defineConfig({
       registerType: "autoUpdate",
     }),
   ],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/tests/setup.js',
+    coverage: {
+       reporter: ['text', 'json', 'html'],
+    }
+  }  
 });
