@@ -1,6 +1,5 @@
-import firestore from "../firestore";
-import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
+import {createTodo} from '../firestore.service'
 
 const AddItem = () => {
   const [todo, setTodo] = useState({ description: "", title: "" });
@@ -10,21 +9,14 @@ const AddItem = () => {
     setTodo({ ...todo, [e.target.name]: e.target.value });
   };
 
-  // Send todo object to fire store
-  const addTodo = (e) => {
-    e.preventDefault();
-    const todoRef = collection(firestore, "todos");
-    try {
-      addDoc(todoRef, todo);
-      console.log("Document written with ID: ", todoRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+  const onSubmit = (e) => {
+    e.preventDefault()
+    createTodo(todo)
     setTodo({ title: "", description: "" });
-  };
+  }
 
   return (
-    <form onSubmit={addTodo}>
+    <form onSubmit={onSubmit}>
       <input
         onChange={updateInput}
         type="text"

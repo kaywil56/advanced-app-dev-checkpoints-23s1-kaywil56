@@ -1,22 +1,15 @@
-import DeleteItem from "./DeleteItem";
 import { useEffect, useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
-import firestore from "../firestore";
+import { deleteTodo, updateTodo } from "../firestore.service";
 
 const TodoItem = ({ todo }) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [editTodo, setEditTodo] = useState({title: "", description: ""});
-  // Update todo object on user input
+  const [editTodo, setEditTodo] = useState({ title: "", description: "" });
 
+  // Update todo object on user input
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const todoRef = doc(firestore, "todos", todo.id);
-    await setDoc(
-      todoRef,
-      { description: editTodo.description, title: editTodo.title },
-      { merge: true }
-    );
-    setIsEdit(false)
+    updateTodo(editTodo, todo.id)
+    setIsEdit(false);
   };
 
   const updateInput = (e) => {
@@ -24,9 +17,8 @@ const TodoItem = ({ todo }) => {
   };
 
   useEffect(() => {
-    console.log(todo)
-    setEditTodo({title: todo.title, description: todo.description})
-  }, [todo])
+    setEditTodo({ title: todo.title, description: todo.description });
+  }, [todo]);
 
   return (
     <li>
@@ -53,7 +45,7 @@ const TodoItem = ({ todo }) => {
           <h2>{todo.title}</h2>
           <p>{todo.description}</p>
           <button onClick={() => setIsEdit(true)}>Edit</button>
-          <DeleteItem uid={todo.id} />
+          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
         </>
       )}
     </li>

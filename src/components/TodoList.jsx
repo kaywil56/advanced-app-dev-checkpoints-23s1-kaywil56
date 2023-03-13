@@ -1,7 +1,7 @@
 import TodoItem from "./TodoItem";
 import { collection, onSnapshot, query } from "firebase/firestore";
-import { useEffect } from "react";
 import firestore from "../firestore";
+import { useEffect } from "react";
 import { useState } from "react";
 
 const TodoList = () => {

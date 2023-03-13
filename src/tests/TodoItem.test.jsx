@@ -1,50 +1,71 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, test, beforeEach } from "vitest";
+import { describe, expect, test, beforeEach, vi } from "vitest";
 import TodoItem from "../components/TodoItem";
+import { updateTodo, deleteTodo } from "../firestore.service";
+
+// Mock firestore update function
+vi.mock("../firestore.service", () => {
+  return { updateTodo: vi.fn(), deleteTodo: vi.fn() };
+});
 
 describe("TodoItem", () => {
-  // beforeEach(() => {
-  //   render();
-  // });
-
-  test("TodoItem component renders properly", () => {
+  // Render the TodoItem for each case
+  beforeEach(() => {
     const mockTodo = {
       id: "H01tqXVkWLuJJfYwpYii",
-      title: "Grocery Shopping",
-      description: "Buy milk",
-    };
-
-    const todoItemComponent = render(<TodoItem todo={mockTodo} />);
-    // Assert that the component rendered
-    expect(todoItemComponent).toBeTruthy();
-
-    // Assert that the mock props are being displayed
-    const h2 = todoItemComponent.container.querySelector("h2");
-    expect(h2.textContent).toBe("Grocery Shopping");
-
-    // Assert that the mock props are being displayed
-    const p = todoItemComponent.container.querySelector("p");
-    expect(p.textContent).toBe("Buy milk");
-  });
-
-  test("Toggle edit", async () => {
-    const mockTodo = {
-      id: "H01tqXVkWLuJJfYwpYii",
-      title: "Grocery Shopping",
+      title: "Grocery shopping",
       description: "Buy milk",
     };
     render(<TodoItem todo={mockTodo} />);
+  });
 
+  test("TodoItem component renders properly", () => {
+    // Assert that mock props are displayed
+    expect(screen.getByText(/^Grocery shopping$/i)).to.exist;
+    expect(screen.getByText(/^Buy milk$/i)).to.exist;
+  });
+
+  test("Update todo", () => {
     // On load the input elements should not be visible
     // Once toggled the input elements should be visible
-    expect(screen.queryByRole("textbox", { name: "title" })).not.exist;
+    expect(screen.queryByRole("textbox", { name: "title" })).to.not.exist;
     expect(screen.queryByRole("textbox", { name: "description" })).to.not.exist;
 
-    const toggleEditBtn = await screen.getByText(/Edit/i);
+    // Fire the toggle edit event
+    const toggleEditBtn = screen.getByText(/Edit/i);
     fireEvent.click(toggleEditBtn);
 
-    // Once toggled the input elements should be visible
-    expect(screen.getByRole("textbox", { name: "title" })).to.exist;
-    expect(screen.getByRole("textbox", { name: "description" })).to.exist;
+    // Select edit input elements
+    const titleInput = screen.getByRole("textbox", { name: "title" });
+    const descriptionInput = screen.getByRole("textbox", {
+      name: "description",
+    });
+    // Add test input
+    fireEvent.change(titleInput, {
+      target: { value: "Grocery shopping to be done" },
+    });
+    fireEvent.change(descriptionInput, {
+      target: { value: "buy milk, eggs, bread" },
+    });
+    // Submit update form
+    const submitFormBtn = screen.getByText(/Save/i);
+    fireEvent.click(submitFormBtn);
+
+    // Expect the update to to be called once
+    expect(updateTodo).toHaveBeenCalledWith(
+      {
+        title: "Grocery shopping to be done",
+        description: "buy milk, eggs, bread",
+      },
+      "H01tqXVkWLuJJfYwpYii"
+    );
+  });
+
+  test("Delete todo", () => {
+    // Fire the toggle edit event
+    const deleteBtn = screen.getByText(/Delete/i);
+    fireEvent.click(deleteBtn);
+
+    expect(deleteTodo).toHaveBeenCalledWith("H01tqXVkWLuJJfYwpYii");
   });
 });

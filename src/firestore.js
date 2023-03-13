@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,19 +13,13 @@ const firebaseConfig = {
   storageBucket: "todo-pwa-a1582.appspot.com",
   messagingSenderId: "68173145197",
   appId: "1:68173145197:web:b1b87a48c76e09c8d8cb64",
-  measurementId: "G-PFHCTENHF0"
+  measurementId: "G-PFHCTENHF0",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
-enableIndexedDbPersistence(firestore)
-.catch((err) => {
-  if (err.code == 'failed-precondition') {
-      console.log("persistence can only be enabled")
-  } else if (err.code == 'unimplemented') {
-      console.log("The current browser does not support all of the")
-  }
-});
+// connectFirestoreEmulator(firestore, 'localhost', 5173);
+enableIndexedDbPersistence(firestore);
 
-export default firestore
+export default firestore;
