@@ -19,6 +19,7 @@ const AddItem = () => {
     <form onSubmit={onSubmit}>
       <input
         onChange={updateInput}
+        aria-label="title"
         type="text"
         name="title"
         placeholder="Title"
@@ -26,6 +27,8 @@ const AddItem = () => {
       />
       <textarea
         onChange={updateInput}
+        aria-label="description"
+        id="description"
         type="text"
         name="description"
         placeholder="Description"

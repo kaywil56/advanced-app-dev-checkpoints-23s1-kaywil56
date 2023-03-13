@@ -19,7 +19,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
-// connectFirestoreEmulator(firestore, 'localhost', 5173);
-enableIndexedDbPersistence(firestore);
+enableIndexedDbPersistence(firestore).catch(err => {
+  console.log(err)
+});
 
 export default firestore;

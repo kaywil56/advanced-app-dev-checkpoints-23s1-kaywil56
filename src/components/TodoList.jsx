@@ -1,31 +1,33 @@
 import TodoItem from "./TodoItem";
-import { collection, onSnapshot, query } from "firebase/firestore";
+// import firestore from "../firestore";
+import { useEffect, useState } from "react";
+import { addDoc, collection, deleteDoc, doc, setDoc, onSnapshot, query } from "firebase/firestore";
 import firestore from "../firestore";
-import { useEffect } from "react";
-import { useState } from "react";
+import { getTodos } from "../firestore.service";
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const q = await query(collection(firestore, "todos"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const items = [];
-        querySnapshot.forEach((doc) => {
-            items.push({
-              id: doc.id,
-              title: doc.data().title,
-              description: doc.data().description,
-            });
-        });
-        setTodos(items);
-        return () => unsubscribe()
-      });
-    };
-    fetchTodos();
-  }, []);
+  // useEffect(() => {
+  //     const q = query(collection(firestore, "todos"));
+  //     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //       const items = [];
+  //       querySnapshot.forEach((doc) => {
+  //           items.push({
+  //             id: doc.id,
+  //             title: doc.data().title,
+  //             description: doc.data().description,
+  //           });
+  //       });
+  //       setTodos(items);
+  //     });
+  //     return () => unsubscribe()
+  // }, []);
   
+  useEffect(() => {
+    getTodos(setTodos)
+  }, [])
+
   return (
     <ul>
       {todos.map((todo, idx) => {
