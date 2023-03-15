@@ -19,7 +19,6 @@ describe("AddItem", () => {
     expect(screen.getByLabelText('title')).to.exist
     expect(screen.getByLabelText('description')).to.exist
     expect(screen.getByText(/Submit/)).to.exist
-
   });
 
   test("create todo", () => {

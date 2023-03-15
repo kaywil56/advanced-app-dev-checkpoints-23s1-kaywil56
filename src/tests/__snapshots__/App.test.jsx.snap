@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`App > Test app is rendered correctly 1`] = `
+<DocumentFragment>
+  <h1>
+    Todo List
+  </h1>
+  <ul />
+  <form>
+    <input
+      aria-label="title"
+      name="title"
+      placeholder="Title"
+      type="text"
+      value=""
+    />
+    <textarea
+      aria-label="description"
+      id="description"
+      name="description"
+      placeholder="Description"
+      type="text"
+    />
+    <button
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</DocumentFragment>
+`;

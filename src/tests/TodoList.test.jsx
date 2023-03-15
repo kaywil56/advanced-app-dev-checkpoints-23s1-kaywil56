@@ -8,8 +8,11 @@ vi.mock("../firestore.service", () => {
 });
 
 describe("TodoList", () => {
+  test("Test TodoList matches snapshot", () => {
+    const {asFragment, getByText} = render(<TodoList />)
+    expect(asFragment()).toMatchSnapshot()
+  });
   test("Test that onSnapShot is called on mount", () => {
-    render(<TodoList />);
     expect(getTodos).toHaveBeenCalledOnce()
   });
 });
