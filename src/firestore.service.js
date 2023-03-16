@@ -40,6 +40,6 @@ export const getTodos = async (setTodos) => {
       });
     });
     setTodos(items);
-    // return () => unsubscribe()
+    return () => unsubscribe()
   });
 };

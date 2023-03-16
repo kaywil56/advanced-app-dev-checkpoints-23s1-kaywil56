@@ -1,4 +1,122 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: white;
+  background: #093028;
+  background: -webkit-linear-gradient(to right, #237a57, #093028);
+  background: linear-gradient(to right, #237a57, #093028);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+}
+
+li {
+  background-color: white;
+  border-radius: 3px;
+  list-style-type: none;
+  color: #333;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 10px 6px -6px #0c0c0c;
+}
+
+h2 {
+  font-size: large;
+  margin: 1px;
+}
+
+h3 {
+  font-size: medium;
+  margin: 1px;
+}
+
+ul {
+  all: unset;
+}
+
+.add-todo-inpts {
+  all: unset;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: hsl(235, 21%, 11%);
+  margin-bottom: 5px;
+  width: calc(100% - 20px);
+}
+
+.edit-inpts{
+  all: unset;
+  padding: 10px;
+  background-color: rgb(230, 228, 228);
+  border: 2px solid #333;
+  margin-bottom: 5px;
+  width: calc(100% - 23px);
+}
+
+#create-todo {
+  all: unset;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: hsl(235, 21%, 11%);
+  border: 2px solid hsl(235, 21%, 11%);
+  margin-bottom: 10px;
+  transition: 0.5s;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+}
+
+#create-todo:hover {
+  border: 2px solid white;
+}
+
+#save-todo {
+  all: unset;
+  padding: 10px;
+  border-radius: 3px;
+  border: 2px solid #333;
+  margin-bottom: 10px;
+  transition: 0.5s;
+  display: grid;
+  place-items: center;
+}
+
+#save-todo:hover {
+  border: 2px solid black;
+  background-color: rgb(202, 201, 201);
+}
+
+main {
+  width: 40%;
+}
+
+.edit-del-btns {
+  all: unset;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #fff;
+  border: 2px solid #333;
+  margin-bottom: 10px;
+  transition: 0.5s;
+  display: grid;
+  place-items: center;
+  margin-right: 5px;
+}
+
+.edit-del-btns:hover {
+  background-color: #d1d1d1;
+  border: 2px solid black;
+}
+
+#edit-del-cont {
+  display: flex;
+  flex-direction: row;
 }

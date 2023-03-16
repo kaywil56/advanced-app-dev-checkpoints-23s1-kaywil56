@@ -1,5 +1,6 @@
 import { useState } from "react";
-import {createTodo} from '../firestore.service'
+import { createTodo } from "../firestore.service";
+import { IoAddOutline } from "react-icons/io5";
 
 const AddItem = () => {
   const [todo, setTodo] = useState({ description: "", title: "" });
@@ -10,22 +11,25 @@ const AddItem = () => {
   };
 
   const onSubmit = (e) => {
-    e.preventDefault()
-    createTodo(todo)
+    e.preventDefault();
+    createTodo(todo);
     setTodo({ title: "", description: "" });
-  }
+  };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form id="add-item" onSubmit={onSubmit}>
       <input
+        className="add-todo-inpts"  
         onChange={updateInput}
         aria-label="title"
         type="text"
         name="title"
         placeholder="Title"
         value={todo.title}
+        autocomplete="off"
       />
       <textarea
+        className="add-todo-inpts"
         onChange={updateInput}
         aria-label="description"
         id="description"
@@ -33,8 +37,11 @@ const AddItem = () => {
         name="description"
         placeholder="Description"
         value={todo.description}
+        autocomplete="off"
       />
-      <button type="submit">Submit</button>
+      <button id="create-todo" type="submit">
+        <IoAddOutline style={{ color: "#fff", fontSize: "1.25em" }} />
+      </button>
     </form>
   );
 };
