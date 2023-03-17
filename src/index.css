@@ -1,7 +1,8 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: white;
   background: #093028;
   background: -webkit-linear-gradient(to right, #237a57, #093028);
@@ -12,6 +13,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 h1 {
@@ -52,7 +54,7 @@ ul {
   width: calc(100% - 20px);
 }
 
-.edit-inpts{
+.edit-inpts {
   all: unset;
   padding: 10px;
   background-color: rgb(230, 228, 228);
@@ -119,4 +121,52 @@ main {
 #edit-del-cont {
   display: flex;
   flex-direction: row;
+}
+
+#login{
+  all: unset;
+  padding: 10px 30px 10px 30px;
+  border-radius: 3px;
+  background-color: hsl(235, 21%, 11%);
+  border: 2px solid hsl(235, 21%, 11%);
+  margin-bottom: 10px;
+  transition: 0.5s;
+  display: grid;
+  place-items: center;
+  text-transform: uppercase;
+  font-weight: bold; 
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#login:hover{
+  border-radius: 20px;
+}
+
+#sign-out{
+  all: unset;
+  padding: 5px 10px;
+  border-radius: 3px;
+  background-color: white;
+  border: 2px solid white;
+  margin-bottom: 10px;
+  transition: 0.2s;
+  display: grid;
+  place-items: center;
+  text-transform: uppercase;
+  font-weight: bold; 
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 10px;
+  color: #333;
+  font-size: small;
+}
+
+button{
+  cursor: pointer;
 }

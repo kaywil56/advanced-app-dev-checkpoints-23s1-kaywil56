@@ -19,14 +19,14 @@ const AddItem = () => {
   return (
     <form id="add-item" onSubmit={onSubmit}>
       <input
-        className="add-todo-inpts"  
+        className="add-todo-inpts"
         onChange={updateInput}
         aria-label="title"
         type="text"
         name="title"
         placeholder="Title"
         value={todo.title}
-        autocomplete="off"
+        autoComplete="off"
       />
       <textarea
         className="add-todo-inpts"
@@ -37,7 +37,7 @@ const AddItem = () => {
         name="description"
         placeholder="Description"
         value={todo.description}
-        autocomplete="off"
+        autoComplete="off"
       />
       <button id="create-todo" type="submit">
         <IoAddOutline style={{ color: "#fff", fontSize: "1.25em" }} />

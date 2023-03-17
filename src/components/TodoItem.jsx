@@ -32,7 +32,7 @@ const TodoItem = ({ todo }) => {
             aria-label="title"
             placeholder={todo.title}
             value={editTodo.title}
-            autocomplete="off"
+            autoComplete="off"
           />
           <textarea
             className="edit-inpts"
@@ -41,10 +41,10 @@ const TodoItem = ({ todo }) => {
             aria-label="description"
             placeholder={todo.description}
             value={editTodo.description}
-            autocomplete="off"
+            autoComplete="off"
           />
           <button id="save-todo" type="submit">
-            <IoSave style={{ color: "#333", fontSize: "1em" }}/>
+            <IoSave style={{ color: "#333", fontSize: "1em" }} />
           </button>
         </form>
       ) : (

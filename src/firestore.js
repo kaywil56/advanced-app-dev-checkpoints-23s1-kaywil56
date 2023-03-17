@@ -16,11 +16,10 @@ const firebaseConfig = {
   measurementId: "G-PFHCTENHF0",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
-enableIndexedDbPersistence(firestore).catch(err => {
-  console.log(err)
+enableIndexedDbPersistence(firestore).catch((err) => {
+  console.log(err);
 });
 
 export default firestore;
