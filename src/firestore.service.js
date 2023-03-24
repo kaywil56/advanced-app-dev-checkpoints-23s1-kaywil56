@@ -9,23 +9,26 @@ import {
 } from "firebase/firestore";
 import firestore from "./firestore";
 
-export const createTodo = (todo) => {
-  const todoRef = collection(firestore, "todos");
-  addDoc(todoRef, todo);
+export const createTodo = (todo, userId) => {
+  const docRef = doc(firestore, "users", userId);
+  const colRef = collection(docRef, "todos");
+  addDoc(colRef, todo);
 };
 
-export const createUser = (userId) => {
-  const todoRef = collection(firestore, "users");
-  addDoc(todoRef, userId);
-}
+export const createUser = async (user) => {
+  await setDoc(doc(firestore, "users", user.uid), {
+    name: user.displayName,
+    email: user.email,
+  });
+};
 
-export const deleteTodo = (uid) => {
-  const todoRef = doc(firestore, "todos", uid);
+export const deleteTodo = (uid, userId) => {
+  const todoRef = doc(firestore, "users", userId, "todos", uid);
   deleteDoc(todoRef);
 };
 
-export const updateTodo = async (todo, uid) => {
-  const todoRef = doc(firestore, "todos", uid);
+export const updateTodo = async (todo, uid, userId) => {
+  const todoRef = doc(firestore, "users", userId, "todos", uid);
   await setDoc(
     todoRef,
     { description: todo.description, title: todo.title },
@@ -33,8 +36,11 @@ export const updateTodo = async (todo, uid) => {
   );
 };
 
-export const getTodos = async (setTodos) => {
-  const q = query(collection(firestore, "todos"));
+export const getTodos = async (setTodos, userId) => {
+  // No need to query since the doc is retrieved by document ID
+  const docRef = doc(firestore, "users", userId);
+  const colRef = collection(docRef, "todos");
+  const q = query(colRef);
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const items = [];
     querySnapshot.forEach((doc) => {
@@ -45,6 +51,6 @@ export const getTodos = async (setTodos) => {
       });
     });
     setTodos(items);
-    return () => unsubscribe()
+    return () => unsubscribe();
   });
 };

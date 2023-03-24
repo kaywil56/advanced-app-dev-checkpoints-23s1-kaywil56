@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { deleteTodo, updateTodo } from "../firestore.service";
 import { IoPencil, IoTrashSharp, IoSave } from "react-icons/io5";
+import { Context } from "../context";
 
 const TodoItem = ({ todo }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editTodo, setEditTodo] = useState({ title: "", description: "" });
+  const authContext = useContext(Context)
 
   // Update todo object on user input
   const handleUpdate = async (e) => {
     e.preventDefault();
-    updateTodo(editTodo, todo.id);
+    updateTodo(editTodo, todo.id, authContext[0].uid);
     setIsEdit(false);
   };
 
@@ -57,7 +59,7 @@ const TodoItem = ({ todo }) => {
             </button>
             <button
               className="edit-del-btns"
-              onClick={() => deleteTodo(todo.id)}
+              onClick={() => deleteTodo(todo.id, authContext[0].uid)}
             >
               {" "}
               <IoTrashSharp style={{ color: "#333", fontSize: "1em" }} />

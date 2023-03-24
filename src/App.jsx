@@ -2,6 +2,7 @@ import AddItem from "./components/AddItem";
 import TodoList from "./components/TodoList";
 import Login from "./components/Login";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { createUser } from "./firestore.service";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Context } from "./context";
@@ -14,10 +15,8 @@ const App = () => {
   const checkUserExists = async (user) => {
     const docRef = doc(firestore, "users", user.uid);
     const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      console.log("No such document!");
+    if (!docSnap.exists()) {
+      createUser(user)
     }
   };
 

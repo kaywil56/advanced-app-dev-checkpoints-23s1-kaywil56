@@ -1,12 +1,14 @@
 import TodoItem from "./TodoItem";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getTodos } from "../firestore.service";
+import { Context } from '../context'
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
+  let authContext = useContext(Context)
 
   useEffect(() => {
-    getTodos(setTodos);
+    getTodos(setTodos, authContext[0].uid);
   }, []);
 
   return (
