@@ -14,6 +14,11 @@ export const createTodo = (todo) => {
   addDoc(todoRef, todo);
 };
 
+export const createUser = (userId) => {
+  const todoRef = collection(firestore, "users");
+  addDoc(todoRef, userId);
+}
+
 export const deleteTodo = (uid) => {
   const todoRef = doc(firestore, "todos", uid);
   deleteDoc(todoRef);
