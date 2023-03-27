@@ -9,12 +9,18 @@ import { Context } from "./context";
 const App = () => {
   const auth = getAuth();
   const [authContext, setAuthContext] = useState({});
+  const [unsubscribe, setUnsubscribe] = useState(null);
+
+  const signOutUser = () => {
+    unsubscribe();
+    signOut(auth)
+  };
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setAuthContext(user);
-        createUser(user)
+        createUser(user);
       } else {
         setAuthContext({});
       }
@@ -27,8 +33,8 @@ const App = () => {
         <main>
           <h1>Todo</h1>
           <AddItem />
-          <TodoList />
-          <button onClick={() => signOut(auth)} id="sign-out">
+          <TodoList setUnsubscribe={setUnsubscribe} />
+          <button onClick={signOutUser} id="sign-out">
             Sign out
           </button>
         </main>

@@ -17,7 +17,7 @@ export const createTodo = (todo, userId) => {
 
 export const createUser = async (user) => {
   await setDoc(doc(firestore, "users", user.uid), {
-    name: user.displayName,
+    user_id: user.uid,
     email: user.email,
   });
 };
@@ -36,7 +36,7 @@ export const updateTodo = async (todo, uid, userId) => {
   );
 };
 
-export const getTodos = async (setTodos, userId) => {
+export const getTodos = async (setTodos, userId, setUnsubscribe) => {
   // No need to query since the doc is retrieved by document ID
   const docRef = doc(firestore, "users", userId);
   const colRef = collection(docRef, "todos");
@@ -51,6 +51,6 @@ export const getTodos = async (setTodos, userId) => {
       });
     });
     setTodos(items);
-    return () => unsubscribe();
   });
+  setUnsubscribe(() => unsubscribe);
 };
