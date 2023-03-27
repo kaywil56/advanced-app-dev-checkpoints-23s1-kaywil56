@@ -5,6 +5,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { createUser } from "./firestore.service";
 import { useEffect, useState } from "react";
 import { Context } from "./context";
+import UserInfo from "./components/UserInfo";
 
 const App = () => {
   const auth = getAuth();
@@ -37,6 +38,7 @@ const App = () => {
           <button onClick={signOutUser} id="sign-out">
             Sign out
           </button>
+          <UserInfo />
         </main>
       ) : (
         <Login />
