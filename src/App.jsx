@@ -4,24 +4,25 @@ import Login from "./components/Login";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { createUser } from "./firestore.service";
 import { useEffect, useState } from "react";
-import { Context } from "./context";
 import UserInfo from "./components/UserInfo";
+import Groups from "./components/Groups";
+import AuthContext from './AuthContext'
 
 const App = () => {
   const auth = getAuth();
-  const [authContext, setAuthContext] = useState({});
+  const [authContext, setAuthContext] = useState({})
   const [unsubscribe, setUnsubscribe] = useState(null);
 
   const signOutUser = () => {
     unsubscribe();
-    signOut(auth)
+    signOut(auth);
   };
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setAuthContext(user);
-        createUser(user);
+        setAuthContext(user)
+        // createUser(user);
       } else {
         setAuthContext({});
       }
@@ -29,21 +30,30 @@ const App = () => {
   }, []);
 
   return (
-    <Context.Provider value={[authContext, setAuthContext]}>
+    <AuthContext.Provider value={authContext}>
       {authContext.uid ? (
-        <main>
-          <h1>Todo</h1>
-          <AddItem />
-          <TodoList setUnsubscribe={setUnsubscribe} />
-          <button onClick={signOutUser} id="sign-out">
-            Sign out
-          </button>
-          <UserInfo />
-        </main>
+        <>
+          <header>
+            <UserInfo />
+            <h1>Todo</h1>
+            <div>
+              <button onClick={signOutUser} id="sign-out">
+                Sign out
+              </button>
+            </div>
+          </header>
+          <main>
+            <section>
+              <AddItem />
+              <TodoList setUnsubscribe={setUnsubscribe} />
+            </section>
+            <Groups />
+          </main>
+        </>
       ) : (
         <Login />
       )}
-    </Context.Provider>
+    </AuthContext.Provider>
   );
 };
 

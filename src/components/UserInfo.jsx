@@ -1,13 +1,18 @@
 import { useContext } from "react";
-import { Context } from "../context";
+import AuthContext from "../AuthContext";
 
 const UserInfo = () => {
-  const authContext = useContext(Context);
-
+  const authContext = useContext(AuthContext);
   return (
     <div id="user-info">
-      <p><b>ID: </b>{authContext[0].uid.slice(0, 4)}</p>
-      <p><b>EMAIL: </b>{authContext[0].email}</p>
+      <p>
+        <b>ID: </b>
+        {authContext.uid.slice(0, 4)}
+      </p>
+      <p>
+        <b>EMAIL: </b>
+        {authContext.email}
+      </p>
     </div>
   );
 };

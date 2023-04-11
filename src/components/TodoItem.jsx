@@ -1,17 +1,18 @@
 import { useEffect, useState, useContext } from "react";
 import { deleteTodo, updateTodo } from "../firestore.service";
 import { IoPencil, IoTrashSharp, IoSave } from "react-icons/io5";
-import { Context } from "../context";
+import AuthContext from "../AuthContext";
+
 
 const TodoItem = ({ todo }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editTodo, setEditTodo] = useState({ title: "", description: "" });
-  const authContext = useContext(Context)
+  const authContext = useContext(AuthContext)
 
   // Update todo object on user input
   const handleUpdate = async (e) => {
     e.preventDefault();
-    updateTodo(editTodo, todo.id, authContext[0].uid);
+    updateTodo(editTodo, todo.id, authContext.uid);
     setIsEdit(false);
   };
 
@@ -24,7 +25,7 @@ const TodoItem = ({ todo }) => {
   }, [todo]);
 
   return (
-    <li>
+    <li className="todo-item">
       {isEdit ? (
         <form onSubmit={handleUpdate}>
           <input
@@ -51,7 +52,7 @@ const TodoItem = ({ todo }) => {
         </form>
       ) : (
         <>
-          <h2>{todo.title}</h2>
+          <h3>{todo.title}</h3>
           <p>{todo.description}</p>
           <div id="edit-del-cont">
             <button className="edit-del-btns" onClick={() => setIsEdit(true)}>
@@ -59,7 +60,7 @@ const TodoItem = ({ todo }) => {
             </button>
             <button
               className="edit-del-btns"
-              onClick={() => deleteTodo(todo.id, authContext[0].uid)}
+              onClick={() => deleteTodo(todo.id, authContext.uid)}
             >
               {" "}
               <IoTrashSharp style={{ color: "#333", fontSize: "1em" }} />

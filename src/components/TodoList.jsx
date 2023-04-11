@@ -1,16 +1,24 @@
 import TodoItem from "./TodoItem";
 import { useEffect, useState, useContext } from "react";
 import { getTodos } from "../firestore.service";
-import { Context } from "../context";
+import AuthContext from "../AuthContext";
+
 
 const TodoList = ({ setUnsubscribe }) => {
   const [todos, setTodos] = useState([]);
-  let authContext = useContext(Context);
+  let authContext = useContext(AuthContext);
 
   useEffect(() => {
     // Call getTodos when component mounts
-    getTodos(setTodos, authContext[0].uid, setUnsubscribe);
+    getTodos(setTodos, authContext.uid, setUnsubscribe);
+    console.log(todos)
   }, []);
+
+  useEffect(() => {
+    // Call getTodos when component mounts
+    console.log("Being called")
+    getTodos(setTodos, authContext.uid, setUnsubscribe);
+  }, [authContext?.group]);
 
   return (
     <ul>

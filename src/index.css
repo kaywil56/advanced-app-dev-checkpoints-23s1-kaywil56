@@ -17,10 +17,8 @@ body {
 }
 
 #user-info{
-  position: absolute;
-  top: 10px;
-  left: 10px;
   font-size: small;
+  margin: 0px 10px 0 10px;
 }
 
 h1 {
@@ -28,7 +26,7 @@ h1 {
   letter-spacing: 0.5em;
 }
 
-li {
+.todo-item {
   background-color: white;
   border-radius: 3px;
   list-style-type: none;
@@ -104,7 +102,9 @@ ul {
 }
 
 main {
-  width: 40%;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .edit-del-btns {
@@ -155,10 +155,30 @@ main {
 
 #sign-out{
   all: unset;
-  padding: 5px 10px;
+  display: flex;
+  padding: 7px 20px;
   border-radius: 3px;
   background-color: white;
   border: 2px solid white;
+  transition: 0.2s;
+  display: grid;
+  place-items: center;
+  text-transform: uppercase;
+  font-weight: bold; 
+  cursor: pointer;
+  border-radius: 10px;
+  color: #333;
+  font-size: small;
+  margin: 0px 10px 0 10px;
+}
+
+#create-group{
+  all: unset;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  background-color: hsl(235, 21%, 11%);
+  border: 2px solid hsl(235, 21%, 11%);
   margin-bottom: 10px;
   transition: 0.2s;
   display: grid;
@@ -166,14 +186,25 @@ main {
   text-transform: uppercase;
   font-weight: bold; 
   cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 20px;
   border-radius: 10px;
-  color: #333;
+  color: white;
   font-size: small;
 }
 
 button{
   cursor: pointer;
+}
+
+header{
+  background-color: hsl(235, 21%, 11%);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: white 3px solid;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+ul{
+  list-style-type: none
 }

@@ -1,18 +1,18 @@
 import { useState, useContext } from "react";
 import { createTodo } from "../firestore.service";
 import { IoAddOutline } from "react-icons/io5";
-import { Context } from '../context'
+import AuthContext from "../AuthContext";
 
 const AddItem = () => {
   const [todo, setTodo] = useState({ description: "", title: "" });
-  const authContext = useContext(Context)
+  const authContext = useContext(AuthContext)
   const updateInput = (e) => {
     setTodo({ ...todo, [e.target.name]: e.target.value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    createTodo(todo, authContext[0].uid);
+    createTodo(todo, authContext.uid);
     setTodo({ title: "", description: "" });
   };
 
