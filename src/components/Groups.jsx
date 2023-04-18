@@ -3,15 +3,15 @@ import {
   createGroup,
   getGroups,
   joinGroup,
-  leaveGroup
+  leaveGroup,
+  getCurrentGroup,
 } from "../firestore.service";
 import AuthContext from "../AuthContext";
-
 
 const Groups = () => {
   const [groupName, setGroupName] = useState("");
   const [groups, setGroups] = useState([]);
-  const authContext = useContext(AuthContext);
+  const { authContext, setAuthContext } = useContext(AuthContext);
 
   const create = (e) => {
     e.preventDefault();
@@ -20,37 +20,61 @@ const Groups = () => {
 
   const handleJoinGroup = (groupName) => {
     joinGroup(groupName, authContext.uid);
-    authContext.group = groupName
-    console.log(authContext)
+    setAuthContext({
+      uid: authContext.uid,
+      email: authContext.email,
+      currentGroup: groupName,
+    });
   };
 
   const handleLeaveGroup = () => {
-    leaveGroup(authContext.uid)
-    authContext.group = null
-  }
+    leaveGroup(authContext.uid);
+    setAuthContext({
+      uid: authContext.uid,
+      email: authContext.email,
+      currentGroup: authContext.uid,
+    });
+  };
 
   useEffect(() => {
     getGroups(setGroups);
+    getCurrentGroup(authContext.uid).then((group) => {
+      setAuthContext({
+        uid: authContext.uid,
+        email: authContext.email,
+        currentGroup: group,
+      });
+    });
   }, []);
 
   return (
     <section>
-      <h2>Groups</h2>
       <h3>Current Group</h3>
       <div>
-        <button onClick={handleLeaveGroup}>Leave</button>
+        {authContext.currentGroup == authContext.uid ? (
+          <p>You do not currently belong to any groups</p>
+        ) : (
+          <>
+            <p>{authContext.currentGroup}</p>
+            <button onClick={handleLeaveGroup}>Leave</button>
+          </>
+        )}
       </div>
       <h3>Other Groups</h3>
       <ul>
         {groups.map((group, idx) => {
-          return (
-            <li key={`group-li-${idx}`} className="group-item">
-              <p>{group.name}</p>
-              <div>
-                <button onClick={() => handleJoinGroup(group.name)}>Join</button>
-              </div>
-            </li>
-          );
+          if (group.name != authContext.currentGroup) {
+            return (
+              <li key={`group-li-${idx}`} className="group-item">
+                <p>{group.name}</p>
+                <div>
+                  <button onClick={() => handleJoinGroup(group.name)}>
+                    Join
+                  </button>
+                </div>
+              </li>
+            );
+          }
         })}
       </ul>
       <form onSubmit={create}>

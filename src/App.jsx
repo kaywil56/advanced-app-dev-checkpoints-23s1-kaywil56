@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setAuthContext(user)
+        setAuthContext({uid: user.uid, email: user.email})
         // createUser(user);
       } else {
         setAuthContext({});
@@ -30,7 +30,7 @@ const App = () => {
   }, []);
 
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider value={{authContext, setAuthContext}}>
       {authContext.uid ? (
         <>
           <header>

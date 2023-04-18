@@ -7,12 +7,12 @@ import AuthContext from "../AuthContext";
 const TodoItem = ({ todo }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editTodo, setEditTodo] = useState({ title: "", description: "" });
-  const authContext = useContext(AuthContext)
+  const { authContext } = useContext(AuthContext)
 
   // Update todo object on user input
   const handleUpdate = async (e) => {
     e.preventDefault();
-    updateTodo(editTodo, todo.id, authContext.uid);
+    updateTodo(editTodo, authContext.uid);
     setIsEdit(false);
   };
 

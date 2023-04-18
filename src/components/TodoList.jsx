@@ -3,22 +3,16 @@ import { useEffect, useState, useContext } from "react";
 import { getTodos } from "../firestore.service";
 import AuthContext from "../AuthContext";
 
-
 const TodoList = ({ setUnsubscribe }) => {
   const [todos, setTodos] = useState([]);
-  let authContext = useContext(AuthContext);
+  const { authContext } = useContext(AuthContext);
 
   useEffect(() => {
-    // Call getTodos when component mounts
-    getTodos(setTodos, authContext.uid, setUnsubscribe);
-    console.log(todos)
-  }, []);
-
-  useEffect(() => {
-    // Call getTodos when component mounts
-    console.log("Being called")
-    getTodos(setTodos, authContext.uid, setUnsubscribe);
-  }, [authContext?.group]);
+    if (authContext.currentGroup) {
+      console.log(authContext.currentGroup)
+      getTodos(setTodos, setUnsubscribe, authContext);
+    }    
+  }, [authContext.currentGroup]);
 
   return (
     <ul>

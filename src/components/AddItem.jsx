@@ -5,7 +5,7 @@ import AuthContext from "../AuthContext";
 
 const AddItem = () => {
   const [todo, setTodo] = useState({ description: "", title: "" });
-  const authContext = useContext(AuthContext)
+  const { authContext } = useContext(AuthContext)
   const updateInput = (e) => {
     setTodo({ ...todo, [e.target.name]: e.target.value });
   };
@@ -13,7 +13,7 @@ const AddItem = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     createTodo(todo, authContext.uid);
-    setTodo({ title: "", description: "" });
+    setTodo({ title: "", description: ""});
   };
 
   return (
