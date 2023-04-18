@@ -65,26 +65,26 @@ export const getTodos = async (
 
   console.log(usersDocs)
 
-  // let userIds = [];
-  // usersDocs.forEach((user) => {
-  //   userIds.push(user.data().user_id);
-  // });
+  let userIds = [];
+  usersDocs.forEach((user) => {
+    userIds.push(user.data().user_id);
+  });
 
-  // const todosCollection = collection(firestore, "todos");
-  // const todosQuery = query(todosCollection, where("user_id", "in", userIds));
+  const todosCollection = collection(firestore, "todos");
+  const todosQuery = query(todosCollection, where("user_id", "in", userIds));
 
-  // const unsubscribe = onSnapshot(todosQuery, (querySnapshot) => {
-  //   const items = [];
-  //   querySnapshot.forEach((doc) => {
-  //     items.push({
-  //       id: doc.id,
-  //       title: doc.data().title,
-  //       description: doc.data().description,
-  //     });
-  //   });
-  //   setTodos(items);
-  // });
-  // setUnsubscribe(() => unsubscribe);
+  const unsubscribe = onSnapshot(todosQuery, (querySnapshot) => {
+    const items = [];
+    querySnapshot.forEach((doc) => {
+      items.push({
+        id: doc.id,
+        title: doc.data().title,
+        description: doc.data().description,
+      });
+    });
+    setTodos(items);
+  });
+  setUnsubscribe(() => unsubscribe);
 }
 
 export const getGroups = async (setGroups) => {
