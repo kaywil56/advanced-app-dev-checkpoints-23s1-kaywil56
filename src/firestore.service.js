@@ -10,6 +10,8 @@ import {
   where,
   query,
   getDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import firestore from "./firestore";
 
@@ -31,11 +33,9 @@ export const createUser = async (user) => {
 };
 
 export const createGroup = async (name) => {
-  const group = {
+  await setDoc(doc(firestore, "groups", name), {
     name: name,
-  };
-  const groupRef = collection(firestore, "groups");
-  addDoc(groupRef, group);
+  });
 };
 
 export const deleteTodo = (uid) => {
@@ -45,33 +45,40 @@ export const deleteTodo = (uid) => {
 
 export const updateTodo = async (todo, uid) => {
   const todoRef = doc(firestore, "todos", uid);
-  await setDoc(
-    todoRef,
-    { description: todo.description, title: todo.title, user_id: uid },
-  );
+  await setDoc(todoRef, {
+    description: todo.description,
+    title: todo.title,
+    user_id: uid,
+  });
 };
 
-export const getTodos = async (
-  setTodos,
-  setUnsubscribe,
-  authContext
-) => {
-  const usersCollection = collection(firestore, "users");
-  const usersQuery = query(
-    usersCollection,
-    where("group", "==", authContext.currentGroup)
-  );
-  const usersDocs = await getDocs(usersQuery);
+export const getTodos = async (setTodos, setUnsubscribe, authContext) => {
+  const groupsCollection = collection(firestore, "groups");
 
-  console.log(usersDocs)
+  let todosQuery
+
+  const usersQuery = query(
+    groupsCollection,
+    where("members", "array-contains", `${authContext.uid}`)
+  );
+
+  // Retrieve the documents that match the query
+  const usersDocs = await getDocs(usersQuery);
 
   let userIds = [];
   usersDocs.forEach((user) => {
-    userIds.push(user.data().user_id);
+    user.data().members.forEach((member) => {
+      userIds.push(member);
+    })
   });
 
   const todosCollection = collection(firestore, "todos");
-  const todosQuery = query(todosCollection, where("user_id", "in", userIds));
+  todosQuery = query(todosCollection, where("user_id", "in", userIds));
+
+
+  if(authContext.currentGroup == authContext.uid){
+    todosQuery = query(todosCollection, where("user_id", "==", authContext.uid));
+  }
 
   const unsubscribe = onSnapshot(todosQuery, (querySnapshot) => {
     const items = [];
@@ -85,7 +92,7 @@ export const getTodos = async (
     setTodos(items);
   });
   setUnsubscribe(() => unsubscribe);
-}
+};
 
 export const getGroups = async (setGroups) => {
   const colRef = collection(firestore, "groups");
@@ -103,17 +110,33 @@ export const getGroups = async (setGroups) => {
   // return () => unsubscribe();
 };
 
-export const joinGroup = (groupName, userId) => {
+export const joinGroup = (groupName, userId, groupId) => {
   const userRef = doc(firestore, "users", userId);
   updateDoc(userRef, {
     group: groupName,
   });
+
+  // Get a reference to your collection
+  const docRef = doc(firestore, "groups", groupId);
+
+  updateDoc(docRef, {
+    members: arrayUnion(userId),
+  });
 };
 
-export const leaveGroup = async (userId) => {
-  const currentUserDocRef = doc(firestore, "users", userId);
+export const leaveGroup = async (userId, groupId) => {
+  const currentUserDocRef = doc(firestore, `users/${userId}`);
+  console.log("userID: " , userId)
+  console.log("groupID", groupId)
   await updateDoc(currentUserDocRef, {
     group: userId,
+  });
+
+  // Get a reference to your collection
+  const docRef = doc(firestore, "groups", groupId);
+
+  updateDoc(docRef, {
+    members: arrayRemove(userId),
   });
 };
 

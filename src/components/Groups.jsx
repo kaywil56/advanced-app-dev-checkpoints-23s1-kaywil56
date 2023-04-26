@@ -18,17 +18,17 @@ const Groups = () => {
     createGroup(groupName);
   };
 
-  const handleJoinGroup = (groupName) => {
-    joinGroup(groupName, authContext.uid);
+  const handleJoinGroup = (groupName, groupId) => {
+    joinGroup(groupName, authContext.uid, groupId);
     setAuthContext({
       uid: authContext.uid,
       email: authContext.email,
-      currentGroup: groupName,
+      currentGroup: groupName
     });
   };
 
   const handleLeaveGroup = () => {
-    leaveGroup(authContext.uid);
+    leaveGroup(authContext.uid, authContext.currentGroup);
     setAuthContext({
       uid: authContext.uid,
       email: authContext.email,
@@ -56,7 +56,7 @@ const Groups = () => {
         ) : (
           <>
             <p>{authContext.currentGroup}</p>
-            <button onClick={handleLeaveGroup}>Leave</button>
+            <button onClick={() => handleLeaveGroup()}>Leave</button>
           </>
         )}
       </div>
@@ -68,7 +68,7 @@ const Groups = () => {
               <li key={`group-li-${idx}`} className="group-item">
                 <p>{group.name}</p>
                 <div>
-                  <button onClick={() => handleJoinGroup(group.name)}>
+                  <button onClick={() => handleJoinGroup(group.name, group.id)}>
                     Join
                   </button>
                 </div>
