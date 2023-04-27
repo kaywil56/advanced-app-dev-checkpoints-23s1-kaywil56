@@ -12,7 +12,7 @@ const TodoItem = ({ todo }) => {
   // Update todo object on user input
   const handleUpdate = async (e) => {
     e.preventDefault();
-    updateTodo(editTodo, authContext.uid);
+    updateTodo(editTodo, todo.id, authContext.uid);
     setIsEdit(false);
   };
 
@@ -60,7 +60,7 @@ const TodoItem = ({ todo }) => {
             </button>
             <button
               className="edit-del-btns"
-              onClick={() => deleteTodo(todo.id, authContext.uid)}
+              onClick={() => deleteTodo(todo.id)}
             >
               {" "}
               <IoTrashSharp style={{ color: "#333", fontSize: "1em" }} />

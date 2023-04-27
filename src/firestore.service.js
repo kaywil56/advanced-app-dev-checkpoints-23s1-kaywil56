@@ -38,17 +38,17 @@ export const createGroup = async (name) => {
   });
 };
 
-export const deleteTodo = (uid) => {
-  const todoRef = doc(firestore, "todos", uid);
+export const deleteTodo = (id) => {
+  const todoRef = doc(firestore, "todos", id);
   deleteDoc(todoRef);
 };
 
-export const updateTodo = async (todo, uid) => {
-  const todoRef = doc(firestore, "todos", uid);
+export const updateTodo = async (todo, id, uid) => {
+  const todoRef = doc(firestore, "todos", id);
   await setDoc(todoRef, {
     description: todo.description,
     title: todo.title,
-    user_id: uid,
+    user_id: uid
   });
 };
 
@@ -73,11 +73,11 @@ export const getTodos = async (setTodos, setUnsubscribe, authContext) => {
   });
 
   const todosCollection = collection(firestore, "todos");
-  todosQuery = query(todosCollection, where("user_id", "in", userIds));
-
 
   if(authContext.currentGroup == authContext.uid){
     todosQuery = query(todosCollection, where("user_id", "==", authContext.uid));
+  }else{
+    todosQuery = query(todosCollection, where("user_id", "in", userIds));
   }
 
   const unsubscribe = onSnapshot(todosQuery, (querySnapshot) => {
