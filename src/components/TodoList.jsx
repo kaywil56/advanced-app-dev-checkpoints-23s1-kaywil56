@@ -3,23 +3,31 @@ import { useEffect, useState, useContext } from "react";
 import { getTodos } from "../firestore.service";
 import AuthContext from "../AuthContext";
 
-const TodoList = ({ setUnsubscribe }) => {
+const TodoList = () => {
   const [todos, setTodos] = useState([]);
-  const { authContext } = useContext(AuthContext);
+  const { authContext, setAuthContext } = useContext(AuthContext);
+
+  const handleGoBack = () => {
+    setAuthContext({
+      uid: authContext.uid,
+      email: authContext.email,
+      currentGroup: null
+    })
+  }
 
   useEffect(() => {
-    if (authContext.currentGroup) {
-      console.log(authContext.currentGroup)
-      getTodos(setTodos, setUnsubscribe, authContext);
-    }    
-  }, [authContext.currentGroup]);
+    getTodos(setTodos, authContext);   
+  }, []);
 
   return (
+    <>
+    <button id="back-btn" onClick={() => handleGoBack()}>BACK</button>
     <ul>
       {todos.map((todo, idx) => {
         return <TodoItem key={idx} todo={todo} />;
       })}
     </ul>
+    </>
   );
 };
 

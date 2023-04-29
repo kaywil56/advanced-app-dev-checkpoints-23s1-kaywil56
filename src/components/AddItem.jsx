@@ -12,7 +12,7 @@ const AddItem = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    createTodo(todo, authContext.uid);
+    createTodo(todo, authContext.uid, authContext.currentGroup);
     setTodo({ title: "", description: ""});
   };
 

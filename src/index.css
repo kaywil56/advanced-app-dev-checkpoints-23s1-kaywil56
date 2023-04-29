@@ -208,3 +208,14 @@ header{
 ul{
   list-style-type: none
 }
+
+.group-item{
+  display: flex;
+  border: 1px solid #333;
+}
+
+#back-btn{
+  position: absolute;
+  top: 100px;
+  right: 20px;
+}

@@ -4,13 +4,16 @@ import {
   getGroups,
   joinGroup,
   leaveGroup,
-  getCurrentGroup,
 } from "../firestore.service";
 import AuthContext from "../AuthContext";
+import TodoList from "./TodoList";
+import UserInfo from "./UserInfo";
+import AddItem from "./AddItem";
 
 const Groups = () => {
   const [groupName, setGroupName] = useState("");
   const [groups, setGroups] = useState([]);
+  const [currentUserBelongsTo, setCurrentUserBelongsTo] = useState([]);
   const { authContext, setAuthContext } = useContext(AuthContext);
 
   const create = (e) => {
@@ -18,75 +21,79 @@ const Groups = () => {
     createGroup(groupName);
   };
 
-  const handleJoinGroup = (groupName, groupId) => {
-    joinGroup(groupName, authContext.uid, groupId);
+  const updateCurrentGroup = (groupId) => {
     setAuthContext({
       uid: authContext.uid,
       email: authContext.email,
-      currentGroup: groupName
+      currentGroup: groupId,
     });
   };
 
-  const handleLeaveGroup = () => {
-    leaveGroup(authContext.uid, authContext.currentGroup);
-    setAuthContext({
-      uid: authContext.uid,
-      email: authContext.email,
-      currentGroup: authContext.uid,
-    });
+  const handleJoinGroup = (groupName, groupId) => {
+    joinGroup(groupName, authContext.uid, groupId);
+  };
+
+  const handleLeaveGroup = (groupId) => {
+    leaveGroup(authContext.uid, groupId);
   };
 
   useEffect(() => {
-    getGroups(setGroups);
-    getCurrentGroup(authContext.uid).then((group) => {
-      setAuthContext({
-        uid: authContext.uid,
-        email: authContext.email,
-        currentGroup: group,
-      });
-    });
+    getGroups(setGroups, setCurrentUserBelongsTo, authContext.uid);
   }, []);
 
   return (
     <section>
-      <h3>Current Group</h3>
-      <div>
-        {authContext.currentGroup == authContext.uid ? (
-          <p>You do not currently belong to any groups</p>
-        ) : (
-          <>
-            <p>{authContext.currentGroup}</p>
-            <button onClick={() => handleLeaveGroup()}>Leave</button>
-          </>
-        )}
-      </div>
-      <h3>Other Groups</h3>
-      <ul>
-        {groups.map((group, idx) => {
-          if (group.name != authContext.currentGroup) {
-            return (
-              <li key={`group-li-${idx}`} className="group-item">
-                <p>{group.name}</p>
-                <div>
-                  <button onClick={() => handleJoinGroup(group.name, group.id)}>
-                    Join
-                  </button>
-                </div>
-              </li>
-            );
-          }
-        })}
-      </ul>
-      <form onSubmit={create}>
-        <h2>Create Group</h2>
-        <input
-          onChange={(e) => setGroupName(e.target.value)}
-          placeholder="Group name"
-          type="text"
-          name="group-name"
-        />
-        <button id="create-group">Create group</button>
-      </form>
+      {!authContext.currentGroup ? (
+        <>
+          <form onSubmit={create}>
+            <h2>Create Group</h2>
+            <input
+              onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Group name"
+              type="text"
+              name="group-name"
+            />
+            <button id="create-group">Create group</button>
+          </form>
+          <ul>
+            {groups.map((group, idx) => {
+              if (currentUserBelongsTo.includes(group.id)) {
+                return (
+                  <li key={`group-li-${idx}`} className="group-item">
+                    <span>{group.name}</span>
+                    <div>
+                      <button onClick={() => updateCurrentGroup(group.id)}>
+                        View Todos
+                      </button>
+                      <button onClick={() => handleLeaveGroup(group.id)}>
+                        leave group
+                      </button>
+                    </div>
+                  </li>
+                );
+              } else {
+                return (
+                  <li key={`group-li-${idx}`} className="group-item">
+                    <span>{group.name}</span>
+                    <div>
+                      <button
+                        onClick={() => handleJoinGroup(group.name, group.id)}
+                      >
+                        Join
+                      </button>
+                    </div>
+                  </li>
+                );
+              }
+            })}
+          </ul>
+        </>
+      ) : (
+        <>
+          <AddItem />
+          <TodoList />
+        </>
+      )}{" "}
     </section>
   );
 };
