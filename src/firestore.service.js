@@ -59,6 +59,7 @@ export const createGroup = async (name) => {
   const groupRef = collection(firestore, "groups") 
   await addDoc(groupRef, {
     name: name,
+    members: []
   });
 };
 

@@ -9,16 +9,26 @@ import AuthContext from "../AuthContext";
 import TodoList from "./TodoList";
 import UserInfo from "./UserInfo";
 import AddItem from "./AddItem";
+import Error from "./Error";
 
 const Groups = () => {
   const [groupName, setGroupName] = useState("");
   const [groups, setGroups] = useState([]);
   const [currentUserBelongsTo, setCurrentUserBelongsTo] = useState([]);
   const { authContext, setAuthContext } = useContext(AuthContext);
+  // const [isLoading, setIsLoading] = useState(false)
+  const [showError, setShowError] = useState(true);
 
-  const create = (e) => {
-    e.preventDefault();
-    createGroup(groupName);
+  const create = async (e) => {
+    e.preventDefault()
+    try{
+      e.target.disabled = true
+      await createGroup(groupName);
+    }catch{
+      setShowError(true)
+    }finally{
+      e.target.disabled = false
+    }
   };
 
   const updateCurrentGroup = (groupId) => {
@@ -38,10 +48,11 @@ const Groups = () => {
   };
 
   useEffect(() => {
-    getGroups(setGroups, setCurrentUserBelongsTo, authContext.uid);
+      getGroups(setGroups, setCurrentUserBelongsTo, authContext.uid);
   }, []);
 
   return (
+    <>
     <section>
       {!authContext.currentGroup ? (
         <>
@@ -53,7 +64,7 @@ const Groups = () => {
               type="text"
               name="group-name"
             />
-            <button id="create-group">Create group</button>
+            <button type="submit" id="create-group">Create group</button>
           </form>
           <ul>
             {groups.map((group, idx) => {
@@ -95,6 +106,8 @@ const Groups = () => {
         </>
       )}{" "}
     </section>
+    {showError ? <Error errorMessage={"something went wrong"} setShowError={setShowError} /> : null}
+</>
   );
 };
 

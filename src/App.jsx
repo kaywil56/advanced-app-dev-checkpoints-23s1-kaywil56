@@ -9,6 +9,7 @@ const App = () => {
   const auth = getAuth();
   const [authContext, setAuthContext] = useState({});
   const [unsubscribe, setUnsubscribe] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
 
   const signOutUser = () => {
     signOut(auth);
@@ -18,7 +19,6 @@ const App = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setAuthContext({ uid: user.uid, email: user.email });
-        // createUser(user);
       } else {
         setAuthContext({});
       }
@@ -42,7 +42,7 @@ const App = () => {
           <Groups />
         </>
       ) : (
-        <Login />
+        <Login setIsLoading={setIsLoading} />
       )}
     </AuthContext.Provider>
   );
