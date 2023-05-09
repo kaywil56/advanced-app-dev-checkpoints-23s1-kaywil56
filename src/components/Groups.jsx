@@ -16,18 +16,18 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [currentUserBelongsTo, setCurrentUserBelongsTo] = useState([]);
   const { authContext, setAuthContext } = useContext(AuthContext);
-  // const [isLoading, setIsLoading] = useState(false)
-  const [showError, setShowError] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showError, setShowError] = useState(false);
 
   const create = async (e) => {
-    e.preventDefault()
-    try{
-      e.target.disabled = true
+    e.preventDefault();
+    try {
+      e.target.disabled = true;
       await createGroup(groupName);
-    }catch{
-      setShowError(true)
-    }finally{
-      e.target.disabled = false
+    } catch {
+      setShowError(true);
+    } finally {
+      e.target.disabled = false;
     }
   };
 
@@ -39,75 +39,109 @@ const Groups = () => {
     });
   };
 
-  const handleJoinGroup = (groupName, groupId) => {
-    joinGroup(groupName, authContext.uid, groupId);
+  const handleJoinGroup = async (e, groupName, groupId) => {
+    try {
+      e.target.disabled = true;
+      await joinGroup(groupName, authContext.uid, groupId);
+    } catch {
+      setShowError(true);
+    } finally {
+      e.target.disabled = false;
+    }
   };
 
-  const handleLeaveGroup = (groupId) => {
-    leaveGroup(authContext.uid, groupId);
+  const handleLeaveGroup = async (e, groupId) => {
+    try {
+      e.target.disabled = true;
+      await leaveGroup(authContext.uid, groupId);
+    } catch {
+      setShowError(true);
+    } finally {
+      e.target.disabled = false;
+    }
   };
 
   useEffect(() => {
-      getGroups(setGroups, setCurrentUserBelongsTo, authContext.uid);
+    const get = async () => {
+      try {
+        await getGroups(setGroups, setCurrentUserBelongsTo, authContext.uid);
+      } catch {
+        setShowError(true);
+      }
+    };
+    get();
   }, []);
 
   return (
     <>
-    <section>
-      {!authContext.currentGroup ? (
-        <>
-          <form onSubmit={create}>
-            <h2>Create Group</h2>
-            <input
-              onChange={(e) => setGroupName(e.target.value)}
-              placeholder="Group name"
-              type="text"
-              name="group-name"
-            />
-            <button type="submit" id="create-group">Create group</button>
-          </form>
-          <ul>
-            {groups.map((group, idx) => {
-              if (currentUserBelongsTo.includes(group.id)) {
-                return (
-                  <li key={`group-li-${idx}`} className="group-item">
-                    <span>{group.name}</span>
-                    <div>
-                      <button onClick={() => updateCurrentGroup(group.id)}>
-                        View Todos
-                      </button>
-                      <button onClick={() => handleLeaveGroup(group.id)}>
-                        leave group
-                      </button>
-                    </div>
-                  </li>
-                );
-              } else {
-                return (
-                  <li key={`group-li-${idx}`} className="group-item">
-                    <span>{group.name}</span>
-                    <div>
-                      <button
-                        onClick={() => handleJoinGroup(group.name, group.id)}
-                      >
-                        Join
-                      </button>
-                    </div>
-                  </li>
-                );
-              }
-            })}
-          </ul>
-        </>
-      ) : (
-        <>
-          <AddItem />
-          <TodoList />
-        </>
-      )}{" "}
-    </section>
-    {showError ? <Error errorMessage={"something went wrong"} setShowError={setShowError} /> : null}
-</>
+      <section>
+            {!authContext.currentGroup ? (
+              <>
+                <form onSubmit={create}>
+                  <h2>Create Group</h2>
+                  <input
+                    onChange={(e) => setGroupName(e.target.value)}
+                    placeholder="Group name"
+                    type="text"
+                    name="group-name"
+                  />
+                  <button type="submit" id="create-group">
+                    Create group
+                  </button>
+                </form>
+                <ul>
+                  {groups.map((group, idx) => {
+                    if (currentUserBelongsTo.includes(group.id)) {
+                      return (
+                        <li key={`group-li-${idx}`} className="group-item">
+                          <span>{group.name}</span>
+                          <div>
+                            <button
+                              onClick={(e) => updateCurrentGroup(e, group.id)}
+                            >
+                              View Todos
+                            </button>
+                            <button
+                              onClick={(e) => handleLeaveGroup(e, group.id)}
+                            >
+                              leave group
+                            </button>
+                          </div>
+                        </li>
+                      );
+                    } else {
+                      return (
+                        <li key={`group-li-${idx}`} className="group-item">
+                          <span>{group.name}</span>
+                          <div>
+                            <button
+                              onClick={(e) =>
+                                handleJoinGroup(e, group.name, group.id)
+                              }
+                            >
+                              Join
+                            </button>
+                          </div>
+                        </li>
+                      );
+                    }
+                  })}
+                </ul>
+              </>
+            ) : (
+              <>
+                <AddItem />
+                <TodoList />
+              </>
+            )}
+      </section>
+      {showError ? (
+        <Error
+          errorMessage={"something went wrong"}
+          setShowError={setShowError}
+        />
+      ) : null}
+    </>
   );
 };
 
