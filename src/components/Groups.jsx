@@ -97,7 +97,7 @@ const Groups = () => {
                           <span>{group.name}</span>
                           <div>
                             <button
-                              onClick={(e) => updateCurrentGroup(e, group.id)}
+                              onClick={() => updateCurrentGroup(group.id)}
                             >
                               View Todos
                             </button>

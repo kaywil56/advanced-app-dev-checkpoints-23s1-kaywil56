@@ -15,11 +15,13 @@ const AddItem = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(authContext)
     try {
       e.target.disabled = true;
       await createTodo(todo, authContext.uid, authContext.currentGroup);
       setTodo({ title: "", description: "" });
-    } catch {
+    } catch(e) {
+      console.log(e)
       setShowError(true);
     } finally {
       e.target.disabled = false;
